@@ -7,12 +7,13 @@ class CartAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.all(25),
+      padding: const EdgeInsets.all(25),
       child: Row(
         children: [
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, 'HomePage');
+              // Mengubah navigasi agar kembali ke halaman sebelumnya
+              Navigator.pop(context);
             },
             child: const Icon(
               Icons.arrow_back_ios,
@@ -32,7 +33,32 @@ class CartAppBar extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          const Icon(Icons.more_vert, size: 30, color: Color(0xFF4C53A5)),
+          // Mengganti Icon biasa dengan PopupMenuButton
+          PopupMenuButton<String>(
+            icon: const Icon(
+              Icons.more_vert,
+              size: 30,
+              color: Color(0xFF4C53A5),
+            ),
+            onSelected: (value) {
+              // Menampilkan SnackBar visual untuk aksi menu
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Aksi terpilih: $value')),
+              );
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem<String>(
+                  value: 'Clear Cart',
+                  child: Text('Bersihkan Keranjang'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Share Cart',
+                  child: Text('Bagikan Keranjang'),
+                ),
+              ];
+            },
+          ),
         ],
       ),
     );

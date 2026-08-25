@@ -30,27 +30,40 @@ class CartPage extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   child: Row(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF4C53A5),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          'Add Coupon Code',
-                          style: TextStyle(
-                            color: Color(0xFF4C53A5),
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold
+                      // Input TextField untuk memasukkan kode kupon
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Masukkan Kode Kupon',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                            fillColor: Colors.white,
+                            filled: true,
                           ),
                         ),
-                      )
+                      ),
+                      const SizedBox(width: 10),
+                      // Tombol Apply visual
+                      ElevatedButton(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Kupon berhasil diterapkan!')),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF4C53A5),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text(
+                          'Apply',
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ],
                   ),
                 ),
