@@ -84,6 +84,13 @@ class HomePageContent extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
+                    // Tambahkan ikon search visual di sebelah kiri bilah pencarian
+                    const Icon(
+                      Icons.search,
+                      size: 27,
+                      color: Color(0xFF4C53A5),
+                    ),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: TextFormField(
                         decoration: const InputDecoration(
