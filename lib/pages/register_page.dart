@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  // Pindahkan form key dan controller ke dalam State agar tidak menjadi variabel global
+class _RegisterPageState extends State<RegisterPage> {
+  // Form key untuk validasi form pendaftaran
   final _formKey = GlobalKey<FormState>();
+
+  // Controller untuk menangkap input pengguna
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -18,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -36,13 +40,15 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 _buildHeader(),
                 const SizedBox(height: 40),
+                _buildNameField(),
+                const SizedBox(height: 20),
                 _buildEmailField(),
                 const SizedBox(height: 20),
                 _buildPasswordField(),
                 const SizedBox(height: 30),
-                _buildLoginButton(context),
+                _buildRegisterButton(context),
                 const SizedBox(height: 20),
-                _buildSignupLink(context),
+                _buildLoginLink(context),
               ],
             ),
           ),
@@ -55,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
     return const Column(
       children: [
         Text(
-          'Welcome Back!',
+          'Create Account',
           style: TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.bold,
@@ -64,13 +70,30 @@ class _LoginPageState extends State<LoginPage> {
         ),
         SizedBox(height: 10),
         Text(
-          'Login to continue',
+          'Sign up to get started',
           style: TextStyle(
             fontSize: 18,
             color: Color(0xFF4C53A5),
           ),
         )
       ],
+    );
+  }
+
+  Widget _buildNameField() {
+    return TextFormField(
+      controller: _nameController,
+      decoration: InputDecoration(
+        labelText: 'Name',
+        prefixIcon: const Icon(Icons.person, color: Color(0xFF4C53A5)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Nama tidak boleh kosong';
+        }
+        return null;
+      },
     );
   }
 
@@ -87,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
         if (value == null || value.isEmpty) {
           return 'Email tidak boleh kosong';
         }
-        // Validasi regex untuk format email
+        // Validasi regex format email
         if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
           return 'Silakan masukkan alamat email yang valid';
         }
@@ -128,11 +151,15 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginButton(BuildContext context) {
+  Widget _buildRegisterButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          Navigator.pushReplacementNamed(context, 'HomePage');
+          // Setelah pendaftaran visual berhasil, tampilkan SnackBar dan kembali ke halaman Login
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Registration Successful! Please login.')),
+          );
+          Navigator.pop(context);
         }
       },
       style: ElevatedButton.styleFrom(
@@ -141,20 +168,20 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
       ),
       child: const Text(
-        'Login',
+        'Sign Up',
         style: TextStyle(fontSize: 18, color: Colors.white),
       ),
     );
   }
 
-  Widget _buildSignupLink(BuildContext context) {
+  Widget _buildLoginLink(BuildContext context) {
     return TextButton(
       onPressed: () {
-        // Navigasi ke halaman pendaftaran (RegisterPage)
-        Navigator.pushNamed(context, 'RegisterPage');
+        // Kembali ke halaman Login
+        Navigator.pop(context);
       },
       child: const Text(
-        'Don\'t have an account? Sign up',
+        'Already have an account? Login',
         style: TextStyle(
           fontSize: 16,
           color: Color(0xFF4C53A5),

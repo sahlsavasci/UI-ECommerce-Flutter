@@ -5,6 +5,7 @@ import 'pages/cart_page.dart';
 import 'pages/home_page.dart';
 import 'pages/list_chat.dart';
 import 'pages/detail_chat.dart';
+import 'pages/register_page.dart'; // Impor RegisterPage baru
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       initialRoute: 'LoginPage',
       routes: {
         'LoginPage': (context) => const LoginPage(),
+        'RegisterPage': (context) => const RegisterPage(), // Daftarkan rute RegisterPage
         'AccountPage': (context) => const AccountPage(),
         'CartPage': (context) => const CartPage(),
         'HomePage': (context) => const HomePage(),
