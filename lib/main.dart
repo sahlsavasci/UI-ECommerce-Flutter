@@ -5,7 +5,8 @@ import 'pages/cart_page.dart';
 import 'pages/home_page.dart';
 import 'pages/list_chat.dart';
 import 'pages/detail_chat.dart';
-import 'pages/register_page.dart'; // Impor RegisterPage baru
+import 'pages/register_page.dart';
+import 'pages/change_password_page.dart'; // Impor ChangePasswordPage baru
 
 void main() {
   runApp(const MyApp());
@@ -21,8 +22,9 @@ class MyApp extends StatelessWidget {
       initialRoute: 'LoginPage',
       routes: {
         'LoginPage': (context) => const LoginPage(),
-        'RegisterPage': (context) => const RegisterPage(), // Daftarkan rute RegisterPage
+        'RegisterPage': (context) => const RegisterPage(),
         'AccountPage': (context) => const AccountPage(),
+        'ChangePasswordPage': (context) => const ChangePasswordPage(), // Daftarkan rute ChangePasswordPage
         'CartPage': (context) => const CartPage(),
         'HomePage': (context) => const HomePage(),
         'ListChat': (context) => ChatListPage(),

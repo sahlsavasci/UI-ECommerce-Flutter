@@ -114,7 +114,8 @@ Widget _buildSettingSection(BuildContext context) {
         title: 'Change Password',
         icon: Icons.lock_outline,
         onTap: () {
-          Navigator.pushNamed(context, '/changePassword');
+          // Navigasi ke halaman ubah password baru
+          Navigator.pushNamed(context, 'ChangePasswordPage');
         },
       ),
       _buildSettingItem(
@@ -168,8 +169,17 @@ void _showLogoutDialog(BuildContext context) {
           ),
           ElevatedButton(
             onPressed: () {
+              // Tutup dialog terlebih dahulu
               Navigator.of(context).pop();
-              Navigator.pushReplacementNamed(context, '/loginPage');
+              // Tampilkan SnackBar sukses logout
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Logout Successful'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+              // Segera arahkan kembali ke LoginPage menggunakan pushReplacementNamed
+              Navigator.pushReplacementNamed(context, 'LoginPage');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF4C53A5),
