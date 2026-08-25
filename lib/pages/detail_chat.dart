@@ -10,7 +10,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-
+  // Daftar pesan obrolan awal secara lokal
   final List<Map<String, dynamic>> messages = [
     {
       'text': 'Hallo',
@@ -25,16 +25,19 @@ class _ChatScreenState extends State<ChatScreen> {
   ];
 
   final TextEditingController _controller = TextEditingController();
+
+  // Helper untuk memformat waktu saat ini ke format HH:mm
   String _formatCurrentTime() {
     final now = TimeOfDay.now();
     return '${now.hour}:${now.minute.toString().padLeft(2, '0')}';
   }
 
+  // Fungsi untuk mengirim pesan baru secara lokal
   void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
+    if (_controller.text.trim().isNotEmpty) {
       setState(() {
         messages.add({
-          'text': _controller.text,
+          'text': _controller.text.trim(),
           'isMe': true,
           'time': _formatCurrentTime()
         });
@@ -44,59 +47,80 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.contactName),
+        title: Text(
+          widget.contactName,
+          style: const TextStyle(color: Color(0xFF4C53A5), fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.blue),
+        elevation: 1,
+        iconTheme: const IconThemeData(color: Color(0xFF4C53A5)),
       ),
       body: Column(
         children: [
+          // Area tampilan chat
           Expanded(
             child: ListView.builder(
-              reverse: true,
+              reverse: true, // Urutan terbalik (pesan terbaru di bawah)
               itemCount: messages.length,
               itemBuilder: (context, index) {
-                final message = messages[messages.length - index -1 ];
+                // Membalik indeks agar pesan yang ditambahkan terakhir muncul di bagian bawah
+                final message = messages[messages.length - index - 1];
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   child: Align(
                     alignment: message['isMe'] ? Alignment.centerRight : Alignment.centerLeft,
                     child: Column(
                       crossAxisAlignment: message['isMe'] ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                       children: [
+                        // Balon Chat (Bubble Chat)
                         Container(
-                          padding: EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color: message['isMe'] ? Colors.blueAccent : Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(16)
+                            // Warna oranye muda untuk pengirim (isMe: true), abu-abu muda untuk penerima (isMe: false)
+                            color: message['isMe'] ? Colors.orange[100] : Colors.grey[300],
+                            borderRadius: BorderRadius.only(
+                              topLeft: const Radius.circular(16),
+                              topRight: const Radius.circular(16),
+                              bottomLeft: Radius.circular(message['isMe'] ? 16 : 0),
+                              bottomRight: Radius.circular(message['isMe'] ? 0 : 16),
+                            ),
                           ),
                           child: Text(
                             message['text'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
-                              color: message['isMe'] ? Colors.white : Colors.black
+                              color: Colors.black, // Teks berwarna hitam agar kontras dan mudah dibaca
                             ),
                           ),
                         ),
-                        SizedBox(height: 4,),
+                        const SizedBox(height: 4),
+                        // Menampilkan string waktu (timestamp) di bawah balon chat
                         Text(
                           message['time'],
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey[600]
+                            color: Colors.grey[600],
                           ),
                         ),
                       ],
                     ),
-                  )
+                  ),
                 );
               },
             ),
           ),
+          // Area input teks chat
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
                 Expanded(
@@ -105,26 +129,29 @@ class _ChatScreenState extends State<ChatScreen> {
                     decoration: InputDecoration(
                       hintText: 'Type a message...',
                       filled: true,
-                      fillColor: Colors.grey[300],
+                      fillColor: Colors.grey[200],
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide.none,
                       ),
-                      contentPadding: EdgeInsets.symmetric(
+                      contentPadding: const EdgeInsets.symmetric(
                         vertical: 10.0,
-                        horizontal: 16.0
-                      )
+                        horizontal: 20.0,
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
-                IconButton(
-                  icon: Icon(Icons.send, color: Colors.blueAccent),
-                  onPressed: _sendMessage,
-                )
+                const SizedBox(width: 8),
+                CircleAvatar(
+                  backgroundColor: const Color(0xFF4C53A5),
+                  child: IconButton(
+                    icon: const Icon(Icons.send, color: Colors.white),
+                    onPressed: _sendMessage,
+                  ),
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
