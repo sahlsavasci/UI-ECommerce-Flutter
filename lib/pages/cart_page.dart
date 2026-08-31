@@ -4,14 +4,15 @@ import 'package:e_commerce/widgets/CartItemSamples.dart';
 import 'package:flutter/material.dart';
 
 class CartPage extends StatelessWidget {
-  const CartPage({super.key});
+  final bool isEmbedded;
+  const CartPage({super.key, this.isEmbedded = false});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
         children: [
-          const CartAppBar(),
+          CartAppBar(showBackButton: !isEmbedded && Navigator.canPop(context)),
           Container(
             height: 700,
             padding: const EdgeInsets.only(top: 15),
@@ -19,7 +20,7 @@ class CartPage extends StatelessWidget {
               color: Color(0xFFEDECF2),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(35),
-                topRight: Radius.circular(35)
+                topRight: Radius.circular(35),
               ),
             ),
             child: Column(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/chat_message.dart';
 
 class ChatScreen extends StatefulWidget {
   final String contactName;
@@ -10,18 +11,20 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  // Daftar pesan obrolan awal secara lokal
-  final List<Map<String, dynamic>> messages = [
-    {
-      'text': 'Hallo',
-      'isMe': true,
-      'time': '12:40'
-    },
-    {
-      'text': 'Ada yang bisa di bantu?',
-      'isMe': false,
-      'time': '12:42'
-    }
+  // Daftar pesan obrolan awal menggunakan typed model
+  final List<ChatMessage> messages = [
+    const ChatMessage(
+      id: '1',
+      text: 'Hallo',
+      isMe: true,
+      time: '12:40',
+    ),
+    const ChatMessage(
+      id: '2',
+      text: 'Ada yang bisa di bantu?',
+      isMe: false,
+      time: '12:42',
+    ),
   ];
 
   final TextEditingController _controller = TextEditingController();
@@ -36,11 +39,14 @@ class _ChatScreenState extends State<ChatScreen> {
   void _sendMessage() {
     if (_controller.text.trim().isNotEmpty) {
       setState(() {
-        messages.add({
-          'text': _controller.text.trim(),
-          'isMe': true,
-          'time': _formatCurrentTime()
-        });
+        messages.add(
+          ChatMessage(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            text: _controller.text.trim(),
+            isMe: true,
+            time: _formatCurrentTime(),
+          ),
+        );
       });
       _controller.clear();
     }
@@ -77,25 +83,25 @@ class _ChatScreenState extends State<ChatScreen> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   child: Align(
-                    alignment: message['isMe'] ? Alignment.centerRight : Alignment.centerLeft,
+                    alignment: message.isMe ? Alignment.centerRight : Alignment.centerLeft,
                     child: Column(
-                      crossAxisAlignment: message['isMe'] ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                      crossAxisAlignment: message.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                       children: [
                         // Balon Chat (Bubble Chat)
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
                             // Warna oranye muda untuk pengirim (isMe: true), abu-abu muda untuk penerima (isMe: false)
-                            color: message['isMe'] ? Colors.orange[100] : Colors.grey[300],
+                            color: message.isMe ? Colors.orange[100] : Colors.grey[300],
                             borderRadius: BorderRadius.only(
                               topLeft: const Radius.circular(16),
                               topRight: const Radius.circular(16),
-                              bottomLeft: Radius.circular(message['isMe'] ? 16 : 0),
-                              bottomRight: Radius.circular(message['isMe'] ? 0 : 16),
+                              bottomLeft: Radius.circular(message.isMe ? 16 : 0),
+                              bottomRight: Radius.circular(message.isMe ? 0 : 16),
                             ),
                           ),
                           child: Text(
-                            message['text'],
+                            message.text,
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black, // Teks berwarna hitam agar kontras dan mudah dibaca
@@ -105,7 +111,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         const SizedBox(height: 4),
                         // Menampilkan string waktu (timestamp) di bawah balon chat
                         Text(
-                          message['time'],
+                          message.time,
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey[600],

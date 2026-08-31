@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 
 class AccountPage extends StatelessWidget {
-  const AccountPage({super.key});
+  final bool isEmbedded;
+  const AccountPage({super.key, this.isEmbedded = false});
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+    final user = authProvider.user;
+
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: !isEmbedded,
         title: const Text('Account', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF4C53A5),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -16,7 +24,7 @@ class AccountPage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              _buildProfileSection(),
+              _buildProfileSection(user?.name ?? 'John Doe', user?.email ?? 'johndoe@example.com'),
               const SizedBox(height: 30),
               _buildSettingSection(context),
             ],
@@ -27,7 +35,7 @@ class AccountPage extends StatelessWidget {
   }
 }
 
-Widget _buildProfileSection() {
+Widget _buildProfileSection(String name, String email) {
   return Container(
     decoration: const BoxDecoration(
       gradient: LinearGradient(
@@ -46,24 +54,30 @@ Widget _buildProfileSection() {
             width: 100,
             height: 100,
             fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => Container(
+              width: 100,
+              height: 100,
+              color: Colors.white24,
+              child: const Icon(Icons.person, size: 50, color: Colors.white),
+            ),
           ),
         ),
         const SizedBox(width: 20),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'John Doe',
-              style: TextStyle(
+            Text(
+              name,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
             const SizedBox(height: 5),
-            const Text(
-              'johndoe@example.com',
-              style: TextStyle(fontSize: 16, color: Colors.white70),
+            Text(
+              email,
+              style: const TextStyle(fontSize: 16, color: Colors.white70),
             ),
           ],
         ),
@@ -169,16 +183,14 @@ void _showLogoutDialog(BuildContext context) {
           ),
           ElevatedButton(
             onPressed: () {
-              // Tutup dialog terlebih dahulu
+              Provider.of<AuthProvider>(context, listen: false).logout();
               Navigator.of(context).pop();
-              // Tampilkan SnackBar sukses logout
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Logout Successful'),
                   duration: Duration(seconds: 2),
                 ),
               );
-              // Segera arahkan kembali ke LoginPage menggunakan pushReplacementNamed
               Navigator.pushReplacementNamed(context, 'LoginPage');
             },
             style: ElevatedButton.styleFrom(

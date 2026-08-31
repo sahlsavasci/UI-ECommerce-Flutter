@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -130,9 +132,15 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildLoginButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         if (_formKey.currentState!.validate()) {
-          Navigator.pushReplacementNamed(context, 'HomePage');
+          await Provider.of<AuthProvider>(context, listen: false).login(
+            _emailController.text.trim(),
+            _passwordController.text,
+          );
+          if (context.mounted) {
+            Navigator.pushReplacementNamed(context, 'HomePage');
+          }
         }
       },
       style: ElevatedButton.styleFrom(

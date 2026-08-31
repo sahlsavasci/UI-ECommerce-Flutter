@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -153,13 +155,19 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildRegisterButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         if (_formKey.currentState!.validate()) {
-          // Setelah pendaftaran visual berhasil, tampilkan SnackBar dan kembali ke halaman Login
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Registration Successful! Please login.')),
+          await Provider.of<AuthProvider>(context, listen: false).register(
+            _nameController.text.trim(),
+            _emailController.text.trim(),
+            _passwordController.text,
           );
-          Navigator.pop(context);
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Registration Successful! Please login.')),
+            );
+            Navigator.pop(context);
+          }
         }
       },
       style: ElevatedButton.styleFrom(

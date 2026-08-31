@@ -18,6 +18,12 @@ class _HomePageState extends State<HomePage> {
   final PageController _pageController = PageController();
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
@@ -29,8 +35,8 @@ class _HomePageState extends State<HomePage> {
         },
         children: const [
           HomePageContent(),
-          CartPage(),
-          AccountPage(),
+          CartPage(isEmbedded: true),
+          AccountPage(isEmbedded: true),
         ],
       ),
       bottomNavigationBar: CurvedNavigationBar(

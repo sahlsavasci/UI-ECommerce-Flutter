@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/cart_provider.dart';
 
 class CartBottomNavbar extends StatelessWidget {
   const CartBottomNavbar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
+
     return BottomAppBar(
       height: 140,
       child: Container(
@@ -15,7 +19,7 @@ class CartBottomNavbar extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Total: ',
                   style: TextStyle(
                     fontSize: 20,
@@ -24,8 +28,8 @@ class CartBottomNavbar extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '\$29.00',
-                  style: TextStyle(
+                  '\$${cartProvider.totalPrice.toStringAsFixed(2)}',
+                  style: const TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF4C53A5),

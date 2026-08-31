@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CartAppBar extends StatelessWidget {
-  const CartAppBar({super.key});
+  final bool showBackButton;
+  const CartAppBar({super.key, this.showBackButton = true});
 
   @override
   Widget build(BuildContext context) {
@@ -10,17 +11,18 @@ class CartAppBar extends StatelessWidget {
       padding: const EdgeInsets.all(25),
       child: Row(
         children: [
-          InkWell(
-            onTap: () {
-              // Mengubah navigasi agar kembali ke halaman sebelumnya
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 30,
-              color: Color(0xFF4C53A5),
+          if (showBackButton) ...[
+            InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_back_ios,
+                size: 30,
+                color: Color(0xFF4C53A5),
+              ),
             ),
-          ),
+          ],
           const Padding(
             padding: EdgeInsets.only(left: 20),
             child: Text(
