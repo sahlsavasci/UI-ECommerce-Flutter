@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 class CartAppBar extends StatelessWidget {
   final bool showBackButton;
@@ -18,8 +19,8 @@ class CartAppBar extends StatelessWidget {
               },
               child: const Icon(
                 Icons.arrow_back_ios,
-                size: 30,
-                color: Color(0xFF4C53A5),
+                size: 28,
+                color: AppTheme.primaryColor,
               ),
             ),
           ],
@@ -27,23 +28,17 @@ class CartAppBar extends StatelessWidget {
             padding: EdgeInsets.only(left: 20),
             child: Text(
               'Cart',
-              style: TextStyle(
-                color: Color(0xFF4C53A5),
-                fontSize: 23,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTheme.heading2,
             ),
           ),
           const Spacer(),
-          // Mengganti Icon biasa dengan PopupMenuButton
           PopupMenuButton<String>(
             icon: const Icon(
               Icons.more_vert,
-              size: 30,
-              color: Color(0xFF4C53A5),
+              size: 28,
+              color: AppTheme.primaryColor,
             ),
             onSelected: (value) {
-              // Menampilkan SnackBar visual untuk aksi menu
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Aksi terpilih: $value')),
               );

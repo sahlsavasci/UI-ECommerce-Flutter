@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/cart_provider.dart';
+import 'theme/app_theme.dart';
 import 'pages/login_page.dart';
 import 'pages/account_page.dart';
 import 'pages/cart_page.dart';
@@ -30,6 +31,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'EcoGlobal E-Commerce',
+      theme: AppTheme.lightTheme,
       initialRoute: 'LoginPage',
       routes: {
         'LoginPage': (context) => const LoginPage(),

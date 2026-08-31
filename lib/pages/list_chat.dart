@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 class ChatListPage extends StatelessWidget {
   ChatListPage({super.key});
@@ -24,27 +25,28 @@ class ChatListPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new), // Mengubah ikon back
-          color: const Color(0xFF4C53A5), // Mengubah warna tombol
+          icon: const Icon(Icons.arrow_back_ios_new),
+          color: AppTheme.primaryColor,
           onPressed: () {
-            Navigator.pop(context); // Aksi untuk kembali ke halaman sebelumnya
+            Navigator.pop(context);
           },
         ),
         title: const Text(
           'List Chat',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 25,
-            color: Color(0xFF4C53A5),
-          ),
+          style: AppTheme.heading2,
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [IconButton(icon: const Icon(Icons.search), onPressed: () {})],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: AppTheme.primaryColor),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: Column(
         children: [
-          // Baris Filter Tombol
+          // Filter Tabs
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 8),
             child: Row(
@@ -54,7 +56,7 @@ class ChatListPage extends StatelessWidget {
                   child: const Text(
                     'Semua',
                     style: TextStyle(
-                      color: Color(0xFF4C53A5),
+                      color: AppTheme.primaryColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -64,14 +66,14 @@ class ChatListPage extends StatelessWidget {
                   onPressed: () {},
                   child: const Text(
                     'Belum Dibaca',
-                    style: TextStyle(color: Color.fromARGB(255, 114, 123, 216)),
+                    style: TextStyle(color: AppTheme.textSecondaryColor),
                   ),
                 ),
               ],
             ),
           ),
 
-          // Daftar Chat
+          // Chat List
           Expanded(
             child: ListView.builder(
               itemCount: chats.length,
@@ -79,8 +81,18 @@ class ChatListPage extends StatelessWidget {
                 final chat = chats[index];
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: AssetImage(chat['avatar']!),
                     radius: 25,
+                    backgroundColor: AppTheme.backgroundColor,
+                    child: ClipOval(
+                      child: Image.asset(
+                        chat['avatar']!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const Icon(
+                          Icons.person,
+                          color: AppTheme.primaryColor,
+                        ),
+                      ),
+                    ),
                   ),
                   title: Text(
                     chat['name']!,
@@ -91,7 +103,6 @@ class ChatListPage extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  // MENCEGAH OVERFLOW: Gunakan SizedBox + Column fleksibel
                   trailing: SizedBox(
                     height: 40,
                     child: Column(

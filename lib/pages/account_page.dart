@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../theme/app_theme.dart';
 
 class AccountPage extends StatelessWidget {
   final bool isEmbedded;
@@ -15,7 +16,7 @@ class AccountPage extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: !isEmbedded,
         title: const Text('Account', style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color(0xFF4C53A5),
+        backgroundColor: AppTheme.primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
@@ -39,7 +40,7 @@ Widget _buildProfileSection(String name, String email) {
   return Container(
     decoration: const BoxDecoration(
       gradient: LinearGradient(
-        colors: [Color(0xFF4C53A5), Color(0xFF6B7CDA)],
+        colors: [AppTheme.primaryColor, AppTheme.primaryLight],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ),
@@ -93,18 +94,18 @@ Widget _buildSettingItem(
   required VoidCallback onTap,
 }) {
   return Card(
-    elevation: 4,
-    margin: const EdgeInsets.symmetric(vertical: 10),
+    elevation: 2,
+    margin: const EdgeInsets.symmetric(vertical: 8),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
     child: ListTile(
-      leading: Icon(icon, color: const Color(0xFF4C53A5), size: 28),
+      leading: Icon(icon, color: AppTheme.primaryColor, size: 26),
       title: Text(
         title,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
       trailing: const Icon(
         Icons.arrow_forward_ios,
-        color: Color(0xFF4C53A5),
+        color: AppTheme.primaryColor,
         size: 16,
       ),
       onTap: onTap,
@@ -128,7 +129,6 @@ Widget _buildSettingSection(BuildContext context) {
         title: 'Change Password',
         icon: Icons.lock_outline,
         onTap: () {
-          // Navigasi ke halaman ubah password baru
           Navigator.pushNamed(context, 'ChangePasswordPage');
         },
       ),
@@ -194,7 +194,7 @@ void _showLogoutDialog(BuildContext context) {
               Navigator.pushReplacementNamed(context, 'LoginPage');
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF4C53A5),
+              backgroundColor: AppTheme.primaryColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
+import '../theme/app_theme.dart';
 
 class CartItemSamples extends StatelessWidget {
   const CartItemSamples({super.key});
@@ -16,11 +17,7 @@ class CartItemSamples extends StatelessWidget {
         child: Center(
           child: Text(
             'Keranjang Anda Kosong',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF4C53A5),
-            ),
+            style: AppTheme.heading3,
           ),
         ),
       );
@@ -40,7 +37,7 @@ class CartItemSamples extends StatelessWidget {
               children: [
                 Checkbox(
                   value: item.isSelected,
-                  activeColor: const Color(0xFF4C53A5),
+                  activeColor: AppTheme.primaryColor,
                   onChanged: (val) {
                     cartProvider.toggleSelection(item.product.id);
                   },
@@ -69,19 +66,11 @@ class CartItemSamples extends StatelessWidget {
                           item.product.title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4C53A5),
-                          ),
+                          style: AppTheme.heading3.copyWith(fontSize: 16),
                         ),
                         Text(
                           '\$${item.product.discountedPrice.toStringAsFixed(0)}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4C53A5),
-                          ),
+                          style: AppTheme.heading3.copyWith(fontSize: 16),
                         ),
                       ],
                     ),
@@ -104,7 +93,7 @@ class CartItemSamples extends StatelessWidget {
                             ),
                           );
                         },
-                        child: const Icon(Icons.delete, color: Colors.red),
+                        child: const Icon(Icons.delete, color: AppTheme.discountColor),
                       ),
                       Row(
                         children: [
@@ -135,11 +124,7 @@ class CartItemSamples extends StatelessWidget {
                             margin: const EdgeInsets.symmetric(horizontal: 10),
                             child: Text(
                               item.quantity.toString().padLeft(2, '0'),
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF4C53A5),
-                              ),
+                              style: AppTheme.heading3.copyWith(fontSize: 16),
                             ),
                           ),
 

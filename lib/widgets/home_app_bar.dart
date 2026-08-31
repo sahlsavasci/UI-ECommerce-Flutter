@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
+import '../theme/app_theme.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key});
@@ -11,7 +12,7 @@ class HomeAppBar extends StatelessWidget {
       padding: const EdgeInsets.all(25),
       child: Row(
         children: [
-          const Icon(Icons.sort, size: 30, color: Color(0xFF4C53A5)),
+          const Icon(Icons.sort, size: 30, color: AppTheme.primaryColor),
           const Padding(
             padding: EdgeInsets.only(left: 20),
             child: Text(
@@ -19,11 +20,11 @@ class HomeAppBar extends StatelessWidget {
               style: TextStyle(
                 fontSize: 23,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF4C53A5),
+                color: AppTheme.primaryColor,
               ),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           badges.Badge(
             badgeStyle: const badges.BadgeStyle(
               badgeColor: Colors.red,
@@ -39,8 +40,8 @@ class HomeAppBar extends StatelessWidget {
               },
               child: const Icon(
                 Icons.message_sharp,
-                size: 32,
-                color: Color(0xFF4C53A5),
+                size: 30,
+                color: AppTheme.primaryColor,
               ),
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/chat_message.dart';
+import '../theme/app_theme.dart';
 
 class ChatScreen extends StatefulWidget {
   final String contactName;
@@ -11,7 +12,6 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  // Daftar pesan obrolan awal menggunakan typed model
   final List<ChatMessage> messages = [
     const ChatMessage(
       id: '1',
@@ -29,13 +29,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
   final TextEditingController _controller = TextEditingController();
 
-  // Helper untuk memformat waktu saat ini ke format HH:mm
   String _formatCurrentTime() {
     final now = TimeOfDay.now();
     return '${now.hour}:${now.minute.toString().padLeft(2, '0')}';
   }
 
-  // Fungsi untuk mengirim pesan baru secara lokal
   void _sendMessage() {
     if (_controller.text.trim().isNotEmpty) {
       setState(() {
@@ -64,35 +62,35 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: Text(
           widget.contactName,
-          style: const TextStyle(color: Color(0xFF4C53A5), fontWeight: FontWeight.bold),
+          style: const TextStyle(color: AppTheme.primaryColor, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
         elevation: 1,
-        iconTheme: const IconThemeData(color: Color(0xFF4C53A5)),
+        iconTheme: const IconThemeData(color: AppTheme.primaryColor),
       ),
       body: Column(
         children: [
-          // Area tampilan chat
+          // Chat display area
           Expanded(
             child: ListView.builder(
-              reverse: true, // Urutan terbalik (pesan terbaru di bawah)
+              reverse: true,
               itemCount: messages.length,
               itemBuilder: (context, index) {
-                // Membalik indeks agar pesan yang ditambahkan terakhir muncul di bagian bawah
                 final message = messages[messages.length - index - 1];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   child: Align(
                     alignment: message.isMe ? Alignment.centerRight : Alignment.centerLeft,
                     child: Column(
-                      crossAxisAlignment: message.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                      crossAxisAlignment:
+                          message.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                       children: [
-                        // Balon Chat (Bubble Chat)
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            // Warna oranye muda untuk pengirim (isMe: true), abu-abu muda untuk penerima (isMe: false)
-                            color: message.isMe ? Colors.orange[100] : Colors.grey[300],
+                            color: message.isMe
+                                ? Colors.orange.shade100
+                                : Colors.grey.shade200,
                             borderRadius: BorderRadius.only(
                               topLeft: const Radius.circular(16),
                               topRight: const Radius.circular(16),
@@ -104,17 +102,16 @@ class _ChatScreenState extends State<ChatScreen> {
                             message.text,
                             style: const TextStyle(
                               fontSize: 16,
-                              color: Colors.black, // Teks berwarna hitam agar kontras dan mudah dibaca
+                              color: Colors.black87,
                             ),
                           ),
                         ),
                         const SizedBox(height: 4),
-                        // Menampilkan string waktu (timestamp) di bawah balon chat
                         Text(
                           message.time,
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey[600],
+                            color: Colors.grey.shade600,
                           ),
                         ),
                       ],
@@ -124,7 +121,7 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             ),
           ),
-          // Area input teks chat
+          // Chat input field
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -135,8 +132,16 @@ class _ChatScreenState extends State<ChatScreen> {
                     decoration: InputDecoration(
                       hintText: 'Type a message...',
                       filled: true,
-                      fillColor: Colors.grey[200],
+                      fillColor: Colors.grey.shade100,
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
                         borderSide: BorderSide.none,
                       ),
@@ -149,7 +154,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 const SizedBox(width: 8),
                 CircleAvatar(
-                  backgroundColor: const Color(0xFF4C53A5),
+                  backgroundColor: AppTheme.primaryColor,
                   child: IconButton(
                     icon: const Icon(Icons.send, color: Colors.white),
                     onPressed: _sendMessage,

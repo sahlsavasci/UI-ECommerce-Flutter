@@ -1,16 +1,17 @@
-import 'package:e_commerce/widgets/HomeAppBar.dart';
 import 'package:flutter/material.dart';
-import 'package:e_commerce/pages/account_page.dart';
-import 'package:e_commerce/pages/cart_page.dart';
-import 'package:e_commerce/widgets/CategoriesWidget.dart';
-import 'package:e_commerce/widgets/ItemsWidget.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import '../theme/app_theme.dart';
+import '../widgets/home_app_bar.dart';
+import '../widgets/categories_widget.dart';
+import '../widgets/items_widget.dart';
+import 'account_page.dart';
+import 'cart_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Colors.transparent,
         height: 70,
-        color: const Color(0xFF4C53A5),
+        color: AppTheme.primaryColor,
         items: const [
           Icon(Icons.home, size: 30, color: Colors.white),
           Icon(Icons.shopping_cart, size: 30, color: Colors.white),
@@ -79,7 +80,7 @@ class HomePageContent extends StatelessWidget {
           ),
           child: Column(
             children: [
-              /* =============== Kotak Pencarian =============== */
+              /* =============== Search Box =============== */
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 15),
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -90,56 +91,51 @@ class HomePageContent extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    // Tambahkan ikon search visual di sebelah kiri bilah pencarian
                     const Icon(
                       Icons.search,
                       size: 27,
-                      color: Color(0xFF4C53A5),
+                      color: AppTheme.primaryColor,
                     ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: TextFormField(
                         decoration: const InputDecoration(
                           border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          filled: false,
                           hintText: "Search here...",
+                          contentPadding: EdgeInsets.zero,
                         ),
                       ),
                     ),
                     const Icon(
                       Icons.camera_alt,
                       size: 27,
-                      color: Color(0xFF4C53A5),
+                      color: AppTheme.primaryColor,
                     ),
                   ],
                 ),
               ),
 
-              /* =============== Kategori Produk =============== */
+              /* =============== Categories =============== */
               Container(
                 alignment: Alignment.centerLeft,
                 margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 child: const Text(
                   'Categories',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF4C53A5),
-                  ),
+                  style: AppTheme.heading2,
                 ),
               ),
               const CategoriesWidget(),
 
-              /* =============== Produk Terlaris =============== */
+              /* =============== Best Selling =============== */
               Container(
                 alignment: Alignment.centerLeft,
                 margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 child: const Text(
                   'Best Selling',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF4C53A5),
-                  ),
+                  style: AppTheme.heading2,
                 ),
               ),
               ItemsWidget(),
@@ -150,4 +146,3 @@ class HomePageContent extends StatelessWidget {
     );
   }
 }
-
