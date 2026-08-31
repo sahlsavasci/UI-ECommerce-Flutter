@@ -10,7 +10,7 @@ packages:
     source: hosted
     version: "2.13.1"
   badges:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: badges
       sha256: cf1c88fb3777df69ccd630b80de5267f54efa4a39381b0404a7c03d56cb7c041
@@ -34,7 +34,7 @@ packages:
     source: hosted
     version: "1.4.1"
   clippy_flutter:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: clippy_flutter
       sha256: f63f487afe1233f7189f83154aa9f4903dddda61687b5b81ce4955250c133a07
@@ -66,7 +66,7 @@ packages:
     source: hosted
     version: "1.0.9"
   curved_navigation_bar:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: curved_navigation_bar
       sha256: bb4ab128fcb6f4a9f0f1f72d227db531818b20218984789777f049fcbf919279
@@ -95,7 +95,7 @@ packages:
     source: hosted
     version: "6.0.0"
   flutter_rating_bar:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_rating_bar
       sha256: d2af03469eac832c591a1eba47c91ecc871fe5708e69967073c043b2d775ed93
