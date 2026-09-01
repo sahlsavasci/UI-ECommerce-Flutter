@@ -6,53 +6,53 @@ class CategoriesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> categories = [
-      'Outfit',
-      'Makanan',
-      'Skincare',
-      'Electronic',
+    final categories = <Map<String, dynamic>>[
+      {'name': 'Fashion', 'icon': Icons.checkroom},
+      {'name': 'Food', 'icon': Icons.fastfood},
+      {'name': 'Beauty', 'icon': Icons.face},
+      {'name': 'Tech', 'icon': Icons.mobile_friendly},
+      {'name': 'Shoes', 'icon': Icons.directions_run},
+      {'name': 'Books', 'icon': Icons.menu_book},
     ];
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
-        children: [
-          for (int i = 0; i < categories.length; i++)
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withValues(alpha: 0.1),
-                    spreadRadius: 1,
-                    blurRadius: 4,
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Image.asset(
-                    'images/categories/${i + 1}.png',
-                    width: 35,
-                    height: 35,
-                    errorBuilder: (context, error, stackTrace) => const Icon(
-                      Icons.category,
-                      size: 30,
-                      color: AppTheme.primaryColor,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    categories[i],
-                    style: AppTheme.heading3.copyWith(fontSize: 16),
-                  ),
-                ],
-              ),
+        children: List.generate(categories.length, (i) {
+          final cat = categories[i];
+          return Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(right: i < categories.length - 1 ? 6 : 0),
+              child: _CategoryPill(name: cat['name']!, icon: cat['icon'] as IconData),
             ),
-        ],
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class _CategoryPill extends StatelessWidget {
+  final String name;
+  final IconData icon;
+  const _CategoryPill({required this.name, required this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: () {},
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: AppTheme.border)),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Icon(icon, size: 22, color: AppTheme.primary),
+            const SizedBox(height: 4),
+            Text(name, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: AppTheme.textSecondary)),
+          ]),
+        ),
       ),
     );
   }

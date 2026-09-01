@@ -4,77 +4,56 @@ import '../providers/cart_provider.dart';
 import '../theme/app_theme.dart';
 
 class CartBottomNavbar extends StatelessWidget {
-  const CartBottomNavbar({super.key});
+  final VoidCallback? onCheckout;
+  const CartBottomNavbar({super.key, this.onCheckout});
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context);
+    final cartProvider = context.watch<CartProvider>();
+    final selectedItems = cartProvider.items.where((item) => item.isSelected).toList();
+    final selectedTotal = selectedItems.fold<double>(0, (sum, item) => sum + (item.product.discountedPrice * item.quantity));
 
-    return BottomAppBar(
-      height: 140,
-      color: Colors.white,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+      decoration: const BoxDecoration(color: Colors.white),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Divider(height: 1),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+            child: Column(
               children: [
-                const Text(
-                  'Total:',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryColor,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text('${selectedItems.length} item dipilih', style: const TextStyle(fontSize: 13, color: AppTheme.textSecondary)),
+                      const SizedBox(height: 2),
+                      const Text('Total:', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                    ]),
+                    Text('\$${selectedTotal.toStringAsFixed(2)}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.primary)),
+                  ],
                 ),
-                Text(
-                  '\$${cartProvider.totalPrice.toStringAsFixed(2)}',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryColor,
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: selectedItems.isEmpty || onCheckout == null ? null : onCheckout,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      disabledBackgroundColor: Colors.grey.shade300,
+                    ),
+                    child: const Text('Checkout', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   ),
                 ),
               ],
             ),
-            InkWell(
-              onTap: () {
-                if (cartProvider.items.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Keranjang belanja kosong')),
-                  );
-                  return;
-                }
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Checkout berhasil untuk total \$${cartProvider.totalPrice.toStringAsFixed(2)}',
-                    ),
-                  ),
-                );
-              },
-              child: Container(
-                alignment: Alignment.center,
-                height: 50,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryColor,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Text(
-                  'Checkout',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -11,204 +11,109 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final user = authProvider.user;
-
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: !isEmbedded,
-        title: const Text('Account', style: TextStyle(color: Colors.white)),
-        backgroundColor: AppTheme.primaryColor,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              _buildProfileSection(user?.name ?? 'John Doe', user?.email ?? 'johndoe@example.com'),
-              const SizedBox(height: 30),
-              _buildSettingSection(context),
-            ],
-          ),
-        ),
-      ),
+      backgroundColor: AppTheme.background,
+      body: CustomScrollView(slivers: [
+        SliverAppBar(automaticallyImplyLeading: !isEmbedded, backgroundColor: AppTheme.primary, expandedHeight: 160, pinned: true, flexibleSpace: FlexibleSpaceBar(
+          title: const Text('Akun Saya', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
+          background: Container(decoration: const BoxDecoration(gradient: LinearGradient(colors: [AppTheme.primary, AppTheme.primaryLight], begin: Alignment.topLeft, end: Alignment.bottomRight)))),
+          actions: [IconButton(icon: const Icon(Icons.settings_outlined, color: Colors.white), onPressed: () {})]),
+        SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.all(16), child: Column(children: [
+          _ProfileCard(user?.name ?? 'John Doe', user?.email ?? 'johndoe@example.com'),
+          const SizedBox(height: 16),
+          _MenuSection(context),
+        ]))),
+      ]),
     );
   }
 }
 
-Widget _buildProfileSection(String name, String email) {
-  return Container(
-    decoration: const BoxDecoration(
-      gradient: LinearGradient(
-        colors: [AppTheme.primaryColor, AppTheme.primaryLight],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-      borderRadius: BorderRadius.all(Radius.circular(15)),
-    ),
-    padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
-    child: Row(
-      children: [
-        ClipOval(
-          child: Image.asset(
-            'assets/images/profile_picture.JPG',
-            width: 100,
-            height: 100,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => Container(
-              width: 100,
-              height: 100,
-              color: Colors.white24,
-              child: const Icon(Icons.person, size: 50, color: Colors.white),
-            ),
-          ),
-        ),
-        const SizedBox(width: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              name,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              email,
-              style: const TextStyle(fontSize: 16, color: Colors.white70),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
+class _ProfileCard extends StatelessWidget {
+  final String name, email;
+  const _ProfileCard(this.name, this.email);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+      child: Row(children: [
+        Container(width: 64, height: 64, decoration: BoxDecoration(color: AppTheme.background, borderRadius: BorderRadius.circular(16)),
+          child: const Icon(Icons.person, size: 32, color: AppTheme.primary)),
+        const SizedBox(width: 16),
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+          const SizedBox(height: 4),
+          Text(email, style: const TextStyle(fontSize: 13, color: AppTheme.textSecondary)),
+        ])),
+      ]),
+    );
+  }
 }
 
-Widget _buildSettingItem(
-  BuildContext context, {
-  required String title,
-  required IconData icon,
-  required VoidCallback onTap,
-}) {
-  return Card(
-    elevation: 2,
-    margin: const EdgeInsets.symmetric(vertical: 8),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-    child: ListTile(
-      leading: Icon(icon, color: AppTheme.primaryColor, size: 26),
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-      ),
-      trailing: const Icon(
-        Icons.arrow_forward_ios,
-        color: AppTheme.primaryColor,
-        size: 16,
-      ),
-      onTap: onTap,
-    ),
-  );
-}
-
-Widget _buildSettingSection(BuildContext context) {
-  return Column(
-    children: [
-      _buildSettingItem(
-        context,
-        title: 'Profile',
-        icon: Icons.person_outline,
-        onTap: () {
-          Navigator.pushNamed(context, '/accountPage');
-        },
-      ),
-      _buildSettingItem(
-        context,
-        title: 'Change Password',
-        icon: Icons.lock_outline,
-        onTap: () {
-          Navigator.pushNamed(context, 'ChangePasswordPage');
-        },
-      ),
-      _buildSettingItem(
-        context,
-        title: 'Notifications',
-        icon: Icons.notifications_outlined,
-        onTap: () {
-          Navigator.pushNamed(context, '/notifications');
-        },
-      ),
-      _buildSettingItem(
-        context,
-        title: 'Help & Support',
-        icon: Icons.help_outline,
-        onTap: () {
-          Navigator.pushNamed(context, '/help');
-        },
-      ),
-      _buildSettingItem(
-        context,
-        title: 'Logout',
-        icon: Icons.logout,
-        onTap: () {
-          _showLogoutDialog(context);
-        },
-      ),
-    ],
-  );
-}
-
-void _showLogoutDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          'Logout',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        content: const Text(
-          'Are you sure you want to logout?',
-          style: TextStyle(fontSize: 16),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Provider.of<AuthProvider>(context, listen: false).logout();
-              Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Logout Successful'),
-                  duration: Duration(seconds: 2),
+class _MenuSection extends StatelessWidget {
+  const _MenuSection(this.context);
+  final BuildContext context;
+  @override
+  Widget build(BuildContext context) {
+    final items = [
+      {'icon': Icons.person_outline, 'title': 'Profil', 'route': '/accountPage'},
+      {'icon': Icons.receipt_long, 'title': 'Riwayat Pesanan', 'route': 'OrderHistoryPage'},
+      {'icon': Icons.lock_outline, 'title': 'Ubah Password', 'route': 'ChangePasswordPage'},
+      {'icon': Icons.notifications_none, 'title': 'Notifikasi', 'route': '/notifications'},
+      {'icon': Icons.help_outline, 'title': 'Bantuan', 'route': '/help'},
+      {'icon': Icons.logout, 'title': 'Keluar', 'route': '_logout'},
+    ];
+    return Container(
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+      child: Column(
+        children: List.generate(items.length, (index) {
+          final item = items[index];
+          final isLast = index == items.length - 1;
+          return Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                if (item['route'] == '_logout') {
+                  _showLogoutDialog(context);
+                } else {
+                  Navigator.pushNamed(context, item['route'] as String);
+                }
+              },
+              borderRadius: BorderRadius.vertical(bottom: isLast ? const Radius.circular(16) : Radius.zero),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(color: AppTheme.background, borderRadius: BorderRadius.circular(10)),
+                      child: Icon(item['icon'] as IconData, color: AppTheme.primary, size: 22),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Text(item['title'] as String, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppTheme.textPrimary)),
+                    ),
+                    const Icon(Icons.chevron_right, color: AppTheme.textSecondary),
+                  ],
                 ),
-              );
-              Navigator.pushReplacementNamed(context, 'LoginPage');
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text(
-              'Logout',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      );
-    },
-  );
+          );
+        }),
+      ),
+    );
+  }
+  void _showLogoutDialog(BuildContext ctx) {
+    showDialog(context: ctx, builder: (_) => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: const Text('Keluar'), content: const Text('Yakin ingin keluar?'),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
+        ElevatedButton(onPressed: () { Provider.of<AuthProvider>(ctx, listen: false).logout(); Navigator.pop(ctx); Navigator.pushReplacementNamed(ctx, 'LoginPage'); },
+          style: ElevatedButton.styleFrom(backgroundColor: AppTheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+          child: const Text('Keluar')),
+      ],
+    ));
+  }
 }

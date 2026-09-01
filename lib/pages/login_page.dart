@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -27,102 +28,91 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildHeader(),
                 const SizedBox(height: 40),
+                // Logo
+                Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primary,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(Icons.shopping_bag_outlined, size: 36, color: Colors.white),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Selamat Datang!',
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Masuk ke akun EcoGlobal kamu',
+                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 36),
                 CustomTextField(
                   controller: _emailController,
                   labelText: 'Email',
-                  prefixIcon: Icons.email,
+                  prefixIcon: Icons.email_outlined,
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Email tidak boleh kosong';
-                    }
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value.trim())) {
-                      return 'Silakan masukkan alamat email yang valid';
-                    }
+                    if (value == null || value.trim().isEmpty) return 'Email tidak boleh kosong';
+                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value.trim())) return 'Email tidak valid';
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 14),
                 CustomTextField(
                   controller: _passwordController,
                   labelText: 'Password',
-                  prefixIcon: Icons.lock,
+                  prefixIcon: Icons.lock_outline,
                   isPassword: true,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Password tidak boleh kosong';
-                    }
-                    if (value.length < 6) {
-                      return 'Password harus memiliki minimal 6 karakter';
-                    }
+                    if (value == null || value.isEmpty) return 'Password tidak boleh kosong';
+                    if (value.length < 6) return 'Password minimal 6 karakter';
                     return null;
                   },
                 ),
-                const SizedBox(height: 30),
-                CustomButton(
-                  text: 'Login',
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await Provider.of<AuthProvider>(context, listen: false).login(
-                        _emailController.text.trim(),
-                        _passwordController.text,
-                      );
-                      if (context.mounted) {
-                        Navigator.pushReplacementNamed(context, 'HomePage');
-                      }
-                    }
-                  },
+                const SizedBox(height: 6),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(onPressed: () {}, child: const Text('Lupa password?')),
                 ),
-                const SizedBox(height: 20),
-                _buildSignupLink(context),
+                const SizedBox(height: 24),
+                CustomButton(text: 'Masuk', onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    setState(() => _isLoading = true);
+                    await Future.delayed(const Duration(milliseconds: 500));
+                    setState(() => _isLoading = false);
+                    if (context.mounted) {
+                      await Provider.of<AuthProvider>(context, listen: false).login(
+                        _emailController.text.trim(), _passwordController.text);
+                      if (context.mounted) Navigator.pushReplacementNamed(context, 'HomePage');
+                    }
+                  }
+                }, isLoading: _isLoading),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Belum punya akun? ', style: TextStyle(color: AppTheme.textSecondary)),
+                    TextButton(onPressed: () => Navigator.pushNamed(context, 'RegisterPage'),
+                      child: const Text('Daftar', style: TextStyle(fontWeight: FontWeight.w600))),
+                  ],
+                ),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return const Column(
-      children: [
-        Text(
-          'Welcome Back!',
-          style: AppTheme.heading1,
-        ),
-        SizedBox(height: 10),
-        Text(
-          'Login to continue',
-          style: TextStyle(
-            fontSize: 18,
-            color: AppTheme.primaryColor,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSignupLink(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        Navigator.pushNamed(context, 'RegisterPage');
-      },
-      child: const Text(
-        'Don\'t have an account? Sign up',
-        style: TextStyle(
-          fontSize: 16,
-          color: AppTheme.primaryColor,
-          fontWeight: FontWeight.w600,
         ),
       ),
     );

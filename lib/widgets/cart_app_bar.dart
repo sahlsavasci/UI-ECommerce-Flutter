@@ -8,53 +8,39 @@ class CartAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
       color: Colors.white,
-      padding: const EdgeInsets.all(25),
       child: Row(
         children: [
-          if (showBackButton) ...[
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                size: 28,
-                color: AppTheme.primaryColor,
+          if (showBackButton)
+            IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+              color: AppTheme.textPrimary,
+              onPressed: () => Navigator.pop(context),
+            ),
+          if (showBackButton) const SizedBox(width: 8),
+          const Expanded(
+            child: Text(
+              'Keranjang Belanja',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimary,
               ),
             ),
-          ],
-          const Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: Text(
-              'Cart',
-              style: AppTheme.heading2,
-            ),
           ),
-          const Spacer(),
           PopupMenuButton<String>(
-            icon: const Icon(
-              Icons.more_vert,
-              size: 28,
-              color: AppTheme.primaryColor,
-            ),
+            icon: const Icon(Icons.more_horiz, size: 24),
+            color: Colors.white,
             onSelected: (value) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Aksi terpilih: $value')),
+                SnackBar(content: Text('Aksi: $value')),
               );
             },
-            itemBuilder: (BuildContext context) {
-              return [
-                const PopupMenuItem<String>(
-                  value: 'Clear Cart',
-                  child: Text('Bersihkan Keranjang'),
-                ),
-                const PopupMenuItem<String>(
-                  value: 'Share Cart',
-                  child: Text('Bagikan Keranjang'),
-                ),
-              ];
-            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: 'Clear', child: Text('Bersihkan Keranjang')),
+              const PopupMenuItem(value: 'Share', child: Text('Bagikan Keranjang')),
+            ],
           ),
         ],
       ),

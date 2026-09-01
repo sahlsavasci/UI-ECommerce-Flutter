@@ -20,15 +20,16 @@ void main() {
         ),
       );
 
-      // Verify that LoginPage renders Welcome Back text
-      expect(find.text('Welcome Back!'), findsOneWidget);
-      expect(find.text('Login to continue'), findsOneWidget);
+      // Verify that LoginPage renders new header text
+      expect(find.text('Selamat Datang!'), findsOneWidget);
+      expect(find.text('Masuk ke akun EcoGlobal kamu'), findsOneWidget);
 
       // Verify input fields and buttons
       expect(find.text('Email'), findsOneWidget);
       expect(find.text('Password'), findsOneWidget);
-      expect(find.widgetWithText(ElevatedButton, 'Login'), findsOneWidget);
-      expect(find.text("Don't have an account? Sign up"), findsOneWidget);
+      expect(find.widgetWithText(ElevatedButton, 'Masuk'), findsOneWidget);
+      expect(find.text("Belum punya akun? "), findsOneWidget);
+      expect(find.text("Daftar"), findsOneWidget);
     });
 
     testWidgets('Empty login submission triggers validation errors', (WidgetTester tester) async {
@@ -42,8 +43,8 @@ void main() {
         ),
       );
 
-      // Tap Login button with empty inputs
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+      // Tap Masuk button with empty inputs
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Masuk'));
       await tester.pump();
 
       // Verify error messages
