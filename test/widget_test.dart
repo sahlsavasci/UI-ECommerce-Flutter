@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
@@ -6,50 +5,43 @@ import 'package:e_commerce/main.dart';
 import 'package:e_commerce/models/product.dart';
 import 'package:e_commerce/providers/auth_provider.dart';
 import 'package:e_commerce/providers/cart_provider.dart';
+import 'package:e_commerce/providers/order_provider.dart';
 
 void main() {
   group('E-Commerce App Smoke Tests', () {
-    testWidgets('Initial route displays LoginPage with header and form fields', (WidgetTester tester) async {
+    testWidgets('Initial route displays HomePage with navigation', (WidgetTester tester) async {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (_) => AuthProvider()),
             ChangeNotifierProvider(create: (_) => CartProvider()),
+            ChangeNotifierProvider(create: (_) => OrderProvider()),
           ],
           child: const MyApp(),
         ),
       );
 
-      // Verify that LoginPage renders new header text
-      expect(find.text('Selamat Datang!'), findsOneWidget);
-      expect(find.text('Masuk ke akun EcoGlobal kamu'), findsOneWidget);
-
-      // Verify input fields and buttons
-      expect(find.text('Email'), findsOneWidget);
-      expect(find.text('Password'), findsOneWidget);
-      expect(find.widgetWithText(ElevatedButton, 'Masuk'), findsOneWidget);
-      expect(find.text("Belum punya akun? "), findsOneWidget);
-      expect(find.text("Daftar"), findsOneWidget);
+      // Verify HomePage renders
+      expect(find.text('Lower Shelf'), findsOneWidget);
+      expect(find.text('Produk Terlaris'), findsOneWidget);
     });
 
-    testWidgets('Empty login submission triggers validation errors', (WidgetTester tester) async {
+    testWidgets('HomePage displays products and search bar', (WidgetTester tester) async {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (_) => AuthProvider()),
             ChangeNotifierProvider(create: (_) => CartProvider()),
+            ChangeNotifierProvider(create: (_) => OrderProvider()),
           ],
           child: const MyApp(),
         ),
       );
 
-      // Tap Masuk button with empty inputs
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Masuk'));
-      await tester.pump();
-
-      // Verify error messages
-      expect(find.text('Email tidak boleh kosong'), findsOneWidget);
-      expect(find.text('Password tidak boleh kosong'), findsOneWidget);
+      // Verify HomePage content
+      expect(find.text('Lower Shelf'), findsOneWidget);
+      expect(find.text('Produk Terlaris'), findsOneWidget);
+      expect(find.text('Search Products'), findsOneWidget);
     });
   });
 

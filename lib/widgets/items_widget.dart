@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
 import '../widgets/product_card.dart';
 
@@ -8,7 +7,7 @@ class ItemsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final products = context.watch<CartProvider>().items.map((ci) => ci.product).toList();
+    final products = CartProvider.productCatalog;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: GridView.builder(

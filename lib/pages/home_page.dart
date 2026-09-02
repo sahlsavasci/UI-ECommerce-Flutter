@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
         physics: const NeverScrollableScrollPhysics(),
         children: [
           const HomePageContent(),
-          CartPage(isEmbedded: true, hideBottomBar: true),
+          CartPage(isEmbedded: true, hideBottomBar: false),
           AccountPage(isEmbedded: true),
         ],
       ),
@@ -116,22 +116,23 @@ class _PromoBanner extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
-        height: 110,
+        height: 120,
         decoration: BoxDecoration(
           gradient: const LinearGradient(colors: [AppTheme.primary, AppTheme.primaryDark], begin: Alignment.topLeft, end: Alignment.bottomRight),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
           children: [
-            Padding(padding: const EdgeInsets.all(16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Text('Lower Shelf\nPrices', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+            Expanded(child: Padding(padding: const EdgeInsets.all(16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min, children: [
+              const Text('Lower Shelf', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+              const Text('Prices', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
               const SizedBox(height: 6),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
                 child: const Text('See Deals', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppTheme.primary)),
               ),
-            ])),
+            ]))),
             const Spacer(),
             Container(
               margin: const EdgeInsets.only(right: 12),

@@ -3,55 +3,52 @@ import '../models/cart_item.dart';
 import '../models/product.dart';
 
 class CartProvider extends ChangeNotifier {
+  // Fixed product catalog — never modified by cart operations
+  static List<Product> get productCatalog => List.unmodifiable(_productCatalog);
+  static const List<Product> _productCatalog = [
+    Product(
+      id: '1',
+      title: 'Nike Air Max',
+      description: 'Comfortable running shoes with premium cushioning',
+      price: 55.0,
+      discountPercent: 10,
+      imagePath: 'images/carts/1.png',
+      category: 'Outfit',
+    ),
+    Product(
+      id: '2',
+      title: 'Sports Watch',
+      description: 'Waterproof smart fitness tracker watch',
+      price: 45.0,
+      discountPercent: 5,
+      imagePath: 'images/carts/2.png',
+      category: 'Electronic',
+    ),
+    Product(
+      id: '3',
+      title: 'Leather Backpack',
+      description: 'Durable and spacious casual leather backpack',
+      price: 70.0,
+      discountPercent: 15,
+      imagePath: 'images/carts/3.png',
+      category: 'Outfit',
+    ),
+    Product(
+      id: '4',
+      title: 'Wireless Headphones',
+      description: 'Noise cancelling Bluetooth 5.0 headphones',
+      price: 85.0,
+      discountPercent: 20,
+      imagePath: 'images/carts/4.png',
+      category: 'Electronic',
+    ),
+  ];
+
   final List<CartItem> _items = [
-    CartItem(
-      product: const Product(
-        id: '1',
-        title: 'Nike Air Max',
-        description: 'Comfortable running shoes with premium cushioning',
-        price: 55.0,
-        discountPercent: 10,
-        imagePath: 'images/carts/1.png',
-        category: 'Outfit',
-      ),
-      quantity: 1,
-    ),
-    CartItem(
-      product: const Product(
-        id: '2',
-        title: 'Sports Watch',
-        description: 'Waterproof smart fitness tracker watch',
-        price: 45.0,
-        discountPercent: 5,
-        imagePath: 'images/carts/2.png',
-        category: 'Electronic',
-      ),
-      quantity: 1,
-    ),
-    CartItem(
-      product: const Product(
-        id: '3',
-        title: 'Leather Backpack',
-        description: 'Durable and spacious casual leather backpack',
-        price: 70.0,
-        discountPercent: 15,
-        imagePath: 'images/carts/3.png',
-        category: 'Outfit',
-      ),
-      quantity: 1,
-    ),
-    CartItem(
-      product: const Product(
-        id: '4',
-        title: 'Wireless Headphones',
-        description: 'Noise cancelling Bluetooth 5.0 headphones',
-        price: 85.0,
-        discountPercent: 20,
-        imagePath: 'images/carts/4.png',
-        category: 'Electronic',
-      ),
-      quantity: 1,
-    ),
+    CartItem(product: productCatalog[0], quantity: 1),
+    CartItem(product: productCatalog[1], quantity: 1),
+    CartItem(product: productCatalog[2], quantity: 1),
+    CartItem(product: productCatalog[3], quantity: 1),
   ];
 
   List<CartItem> get items => List.unmodifiable(_items);

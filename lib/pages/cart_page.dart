@@ -57,7 +57,7 @@ class _CartPageState extends State<CartPage> {
         if (!widget.hideBottomBar)
           CartBottomNavbar(
             onCheckout: hasSelected
-                ? (widget.isEmbedded ? () => Navigator.pushNamed(context, 'CheckoutPage') : null)
+                ? (() => Navigator.pushNamed(context, 'CheckoutPage'))
                 : null,
           ),
       ])),
